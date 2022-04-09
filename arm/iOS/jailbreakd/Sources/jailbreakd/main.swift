@@ -270,7 +270,9 @@ func handleBootFailure() -> Never {
     dispatchMain()
 }
 
-if getuid() != 0 {
+let supportUiProcess = false
+
+if supportUiProcess && getuid() != 0 {
     // Not root, UI Process
     // Do UI stuff
     // Remove old closures first
@@ -480,6 +482,10 @@ case "loadTC":
     }
     pe.unsafelyUnwrapped.injectTC(path: CommandLine.arguments[2])
     pe.unsafelyUnwrapped.deinitKernelCall()
+
+case "cserver":
+    launchCServer()
+    dispatchMain()
     
 default:
     Logger.print("Unknown action \(action)!")
