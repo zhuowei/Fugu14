@@ -306,6 +306,8 @@ if action == "ping" {
     exit(0)
 } else if action == "doNothing" {
     dispatchMain()
+} else if action == "cserver" {
+    print("cserver; don't mess with logging")
 } else if action != "server" {
     setsid()
 } else {
