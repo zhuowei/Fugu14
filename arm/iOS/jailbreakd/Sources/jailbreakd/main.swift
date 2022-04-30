@@ -315,6 +315,8 @@ if action == "ping" {
     Logger.logFileHandle = logOut
 }
 
+print("hello")
+
 var errorOccuredDuringLastBoot = false
 
 if action == "untether" {
@@ -379,10 +381,12 @@ if action == "untether" {
         action = "silent_uninstall"
     }
 }
+print("about to build post exploitation object")
 
 do {
     pe = try PostExploitation()
 } catch MemoryAccessError.failedToInitialize {
+    print("failed to initialize; reexecing")
     execv(Bundle.main.executablePath, CommandLine.unsafeArgv)
     fatalError("Failed to re-exec myself!")
 } catch let e {
