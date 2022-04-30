@@ -14,8 +14,8 @@ echo Building jailbreakd
 echo ${swiftBuild[*]}
 ${swiftBuild[*]}
 
-echo Stripping jailbreakd
-strip -s keep .build/release/jailbreakd
+#echo Stripping jailbreakd
+#strip -s keep .build/release/jailbreakd
 
 echo Signing jailbreakd
 codesign -s "$CODESIGN_IDENTITY" --entitlements jailbreakd.entitlements .build/release/jailbreakd
