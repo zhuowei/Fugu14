@@ -1,0 +1,18 @@
+--- !tapi-tbd
+tbd-version:     4
+targets:         [ arm64-ios ]
+uuids:
+  - target:          arm64-ios
+    value:           1DF2E486-9543-3FA9-BE20-5062510DA259
+flags:           [ not_app_extension_safe ]
+install-name:    '/usr/lib/libkernrw.0.dylib'
+current-version: 0
+compatibility-version: 0
+exports:
+  - targets:         [ arm64-ios ]
+    symbols:         [ _kernRW_getAllProc, _kernRW_getKernelBase, _kernRW_getKernelProc, 
+                       _kernRW_read32, _kernRW_read64, _kernRW_readbuf, _kernRW_write32, 
+                       _kernRW_write64, _kernRW_writebuf, _kernelPort, _krwPort, 
+                       _krw_allProc, _krw_kernelBase, _krw_kernelProc, _krw_read32, 
+                       _krw_read64, _krw_write32, _krw_write64, _requestKernRw ]
+...
