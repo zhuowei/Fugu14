@@ -272,7 +272,8 @@ class Proc: KernelObject {
         
         return Proc(pe, addr: allproc)
     }
-    
+   
+#if false 
     func virt2phys(_ virt: UInt64) throws -> UInt64 {
         guard let ttep = task?.vmMap?.pmap?.ttep else {
             throw ProcError.noPageTable
@@ -325,11 +326,16 @@ class Proc: KernelObject {
             return res
         }
     }
+#endif
+    private func _readBytes(virt: UInt64, count: UInt64, prev: Data? = nil) throws -> Data {
+        fatalError("not implemented")
+    }
     
     func readBytes(virt: UInt64, count: UInt64) throws -> Data {
         return try _readBytes(virt: virt, count: count)
     }
-    
+   
+#if false 
     func writeBytes(virt: UInt64, data: Data) throws {
         if data.count == 0 {
             return
@@ -356,6 +362,10 @@ class Proc: KernelObject {
         
         // Only a single page, this is easy
         try pe.mem.writeBytes(phys: phys, data: data)
+    }
+#endif
+    func writeBytes(virt: UInt64, data: Data) throws {
+        fatalError("not implemented")
     }
     
     func r64(virt: UInt64) throws -> UInt64 {
