@@ -490,6 +490,10 @@ case "loadTC":
     pe.unsafelyUnwrapped.deinitKernelCall()
 
 case "cserver":
+    print("about to set up kernel call!")
+    try! pe.setupKernelCall()
+    // TODO(zhuowei): handle this
+    exit(0)
     launchCServer()
     dispatchMain()
     
