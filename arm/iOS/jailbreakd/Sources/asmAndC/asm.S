@@ -15,7 +15,18 @@ _doMagic:
     str x0, [x23]
     str x0, [x23,#0x8]
 
-    str x22, [x21,x24]
+    //str x22, [x21,x24]
+    // zhuowei: hack: we can't map the kernel struct into our process
+    // and I don't want to RPC from this weirdo thread,
+    // so we wait for our main thread to do the write for us via RPC instead.
+    //
+    mov w0, 0x62
+    strb w0, [x21]
+first_wait_loop:
+    ldrb w0, [x21]
+    cmp w0, 0x63
+    b.ne first_wait_loop
+
     mov x0, x23
     add x0, x0, 0xC
     mov x1, 0x6
