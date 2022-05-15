@@ -26,6 +26,7 @@
 extern char **environ;
 
 extern int init_libkrw_support(void);
+extern uint64_t pac_sign_server_impl(int sign_type, uint64_t addr, uint64_t discriminant);
 
 int runCommand(FILE *f, char *argv[]) {
     pid_t pid = fork();
@@ -530,6 +531,19 @@ void handleConnection(int socket) {
             } else {
                 fprintf(f, "Failed to init libkrw support! (%d)\r\n", res);
             }
+        } else if (strcmp(cmd, "kpacsign") == 0) {
+            // zhuowei: add an extra command
+            char *type_str = getParameter(cmdBuffer, 1);
+            char *addr_str = getParameter(cmdBuffer, 2);
+            char *discriminant_str = getParameter(cmdBuffer, 3);
+            uint64_t addr = strtol(addr_str, NULL, 0);
+            uint64_t discriminant = strtol(discriminant_str, NULL, 0);
+            int sign_type = 1; // pacda
+            if (strcmp(type_str, "ia") == 0) {
+                sign_type = 2; // pacia
+            }
+            uint64_t signed_addr = pac_sign_server_impl(sign_type, addr, discriminant);
+            fprintf(f, "0x%lx\r\n", signed_addr);
         } else {
             fprintf(f, "Unknown command %s!\r\n", cmdBuffer);
         }

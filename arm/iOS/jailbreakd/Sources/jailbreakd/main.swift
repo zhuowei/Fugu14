@@ -31,6 +31,24 @@ func init_libkrw_support() -> Int32 {
     
     return pe!.initKrwSupport()
 }
+// zhuowei
+@_cdecl("pac_sign_server_impl")
+func pac_sign_server_impl(type: Int32, addr: UInt64, discriminant: UInt64) -> UInt64 {
+    guard let pe = pe else {
+        return 999
+    }
+    
+    do {
+        if (type == 2) { // ia
+            return try pe.paciaBadly(value: addr, context: discriminant)
+        } else {
+            return try pe.pacda(value: addr, context: discriminant)
+        }
+    } catch let e {
+        print("Error in pac_sign_server_impl: \(e)");
+        return 0
+    }
+}
 
 @discardableResult
 func run(prog: String, args: [String]) -> Bool {
