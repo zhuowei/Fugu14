@@ -26,6 +26,7 @@
 	<array>
 		<string>IOUserServer</string>
 		<string>RootDomainUserClient</string>
+		<string>IOSurfaceRootUserClient</string>
 	</array>
 	<key>com.apple.private.apfs.revert-to-snapshot</key>
 	<true/>

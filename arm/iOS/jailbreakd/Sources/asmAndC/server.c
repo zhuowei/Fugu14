@@ -543,7 +543,7 @@ void handleConnection(int socket) {
                 sign_type = 2; // pacia
             }
             uint64_t signed_addr = pac_sign_server_impl(sign_type, addr, discriminant);
-            fprintf(f, "0x%lx\r\n", signed_addr);
+            fprintf(f, "0x%llx\r\n", signed_addr);
         } else {
             fprintf(f, "Unknown command %s!\r\n", cmdBuffer);
         }
