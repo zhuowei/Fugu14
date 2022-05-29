@@ -27,6 +27,7 @@ extern char **environ;
 
 extern int init_libkrw_support(void);
 extern uint64_t pac_sign_server_impl(int sign_type, uint64_t addr, uint64_t discriminant);
+extern int exit_better(void);
 
 int runCommand(FILE *f, char *argv[]) {
     pid_t pid = fork();
@@ -213,6 +214,10 @@ void handleConnection(int socket) {
             break;
         } else if (strcmp(cmd, "exit_full") == 0) {
             fprintf(f, "Completely exiting.\r\nBye!\r\n");
+            exit(0);
+        } else if (strcmp(cmd, "exit_better") == 0) {
+            exit_better();
+            // what
             exit(0);
         } else if (strcmp(cmd, "pwd") == 0) {
             char cwd[PATH_MAX];

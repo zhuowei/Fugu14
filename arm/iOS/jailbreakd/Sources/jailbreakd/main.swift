@@ -50,6 +50,15 @@ func pac_sign_server_impl(type: Int32, addr: UInt64, discriminant: UInt64) -> UI
     }
 }
 
+@_cdecl("exit_better")
+func exit_better() -> Int32 {
+    guard pe != nil else {
+        return 999
+    }
+    pe = nil
+    return 0
+}
+
 @discardableResult
 func run(prog: String, args: [String]) -> Bool {
     var argv = [strdup(prog)]
@@ -288,6 +297,25 @@ func handleBootFailure() -> Never {
     dispatchMain()
 }
 
+func setupExecPort() throws {
+    guard let pe = pe else {
+        fatalError("no pe?")
+    }
+    try pe.initializeHvHeap()
+    let trap6 = try pe.createIOConnectTrap6Port()!
+    print("Port = \(trap6), writing to file...")
+    let tableOffset:UInt64 = 0xfffffff007818990
+    // 14 hv syscalls
+    let tableCount:UInt64 = 14
+    let hvBytes = try pe.mem.readBytes(virt: pe.slide(tableOffset), count: tableCount * 8)
+    let tableAsHexString:[String] = (0..<tableCount).map {
+        String(format: "%lx", hvBytes.getGeneric(type: UInt64.self, offset: UInt($0 * 8)))
+    }
+    let output:String = String(format: "%d\n%d\nba5\n", getpid(), trap6) +
+        tableAsHexString.joined(separator: "\n") + "\n"
+    try output.data(using: .utf8)!.write(to: URL(fileURLWithPath: "/tmp/zhuowei_portinfo"))
+}
+
 let supportUiProcess = false
 
 if supportUiProcess && getuid() != 0 {
@@ -510,6 +538,12 @@ case "loadTC":
 case "cserver":
     print("about to set up kernel call!")
     guard pe.setupKernelCall() else {
+        exit(0)
+    }
+    do {
+        try setupExecPort()
+    } catch let e {
+        print("can't setup exec port: \(e)")
         exit(0)
     }
     launchCServer()
