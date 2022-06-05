@@ -354,6 +354,12 @@ if action == "ping" {
     dispatchMain()
 } else if action == "cserver" {
     print("cserver; don't mess with logging")
+    // TODO(zhuowei): this is bad (if this process exits this port name is taken forever)
+    let register = bootstrap_register(bootstrap_port, "com.worthdoingbadly.hypervisor", mach_task_self_)
+    if register != 0 {
+        print("Failed to register: \(register)")
+        exit(0)
+    }
 } else if action != "server" {
     setsid()
 } else {

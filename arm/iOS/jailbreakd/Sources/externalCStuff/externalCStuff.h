@@ -35,4 +35,9 @@ uint64_t reboot3(uint64_t how, uint64_t unk);
 #define PROC_ALL_PIDS 1U
 int proc_listpids(uint32_t type, uint32_t typeinfo, void *buffer, int buffersize);
 
+extern mach_port_t bootstrap_port;
+
+kern_return_t
+bootstrap_register(mach_port_t bp, const char* service_name, mach_port_t sp);
+
 #endif /* externalCStuff_h */
