@@ -547,6 +547,11 @@ case "cserver":
         exit(0)
     }
     do {
+        try pe.raiseMemoryLimit()
+    } catch let e {
+        print("can't raise memory limit")
+    }
+    do {
         try setupExecPort()
     } catch let e {
         print("can't setup exec port: \(e)")
